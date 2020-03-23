@@ -26,12 +26,22 @@ class App < Sinatra::Base
   end
 
   get '/events' do
-    { events: Event.includes(:host).order(:starts_at) }.to_json(include: :host)
+    events =  Event.includes(:host).order(:starts_at)
+    { events: events, total_count: events.count }.to_json(include: :host)
   end
 
   get '/events/:event_id' do
     event = Event.includes(rsvps: :user).find(params[:event_id])
     { event: event }.to_json(include: { rsvps: { include: :user } })
+  end
+
+  get '/departments' do
+    { departments: Department.all.includes(:rsvps) }.to_json
+  end
+
+  get '/rsvps' do
+    rsvps = Rsvp.active
+    { rsvps: rsvps, total_count: rsvps.count }.to_json
   end
 
   error Sinatra::NotFound, ActiveRecord::RecordNotFound do

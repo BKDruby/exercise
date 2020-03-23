@@ -11,10 +11,13 @@ class AppTest < Minitest::Test
   end
 
   def test_list_events
+    events_count = Event.count
+
     get '/events'
 
     assert last_response.ok?
-    assert_equal Event.count, last_body['events'].size
+    assert_equal events_count, last_body['events'].size
+    assert_equal events_count, last_body['total_count']
   end
 
   def test_get_event
@@ -40,6 +43,23 @@ class AppTest < Minitest::Test
 
     assert last_response.ok?
     assert_equal user.name, last_body.dig('user', 'name')
+  end
+
+  def test_list_departments
+    get '/departments'
+
+    assert last_response.ok?
+    assert_equal Department.count, last_body['departments'].size
+  end
+
+  def test_list_rsvps
+    rsvps_count = Rsvp.active.count
+
+    get '/rsvps'
+
+    assert last_response.ok?
+    assert_equal rsvps_count, last_body['rsvps'].size
+    assert_equal rsvps_count, last_body['total_count']
   end
 
   def test_not_found
