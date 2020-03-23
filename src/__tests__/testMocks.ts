@@ -29,3 +29,11 @@ export const mockRsvp = makeMock<API.Rsvp>({
   created_at: "2019-01-01",
   updated_at: "2019-01-01"
 });
+
+export const mockDepartment = makeMock<API.Department>({
+  id: 1,
+  name: "admin",
+  created_at: "2019-01-01",
+  updated_at: "2019-01-01",
+  rsvps_count: 444
+});
